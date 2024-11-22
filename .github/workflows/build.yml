@@ -29,8 +29,8 @@ jobs:
 
     - name: Create setup.bat
       run: |
-        echo "pip install AppDT-${{ github.event.inputs.AppDTVersion }}-py3-none-any.whl" > dist/setup.bat
-        echo "pause" > dist/setup.bat
+        echo "pip install AppDT-${{ github.event.inputs.AppDTVersion }}-py3-none-any.whl" >> dist/setup.bat
+        echo "pause" >> dist/setup.bat
 
     - name: Package dist directory
       run: |

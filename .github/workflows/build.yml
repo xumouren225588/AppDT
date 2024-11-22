@@ -22,7 +22,7 @@ jobs:
 
     - name: Install dependencies and build
       run: |
-        sudo apt upgrade
+        sudo apt update
         sudo apt install zip unzip
         python setup.py bdist_wheel
 

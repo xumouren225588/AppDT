@@ -24,6 +24,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install zip unzip
+        pip install setuptools wheel
         python setup.py bdist_wheel
 
     - name: Create setup.bat

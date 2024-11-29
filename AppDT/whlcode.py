@@ -293,92 +293,54 @@ def adt():
                 fp3=None
                 if set_list[0]:
                     code1=f"""
-            import subprocess
-            import os
-            exe_name = os.path.join(extract_path, "{prname}\\\\{wdesktop}")
-            # 创建一个VBScript脚本来创建快捷方式
-            vbs_script = '''
-
-
+    def create_shortcut(self, exe_name, extract_path):
+        vbs_script = '''
 Set oShell = CreateObject("WScript.Shell")
 Set objFSO = CreateObject("Scripting.FileSystemObject")
-' 指定文件的完整路径
 strTargetFile = "%s"
-' 快捷方式的完整路径和文件名
 strShortcutPath = CreateObject("WScript.Shell").ExpandEnvironmentStrings("%%USERPROFILE%%") & "\\\\Desktop\\\\%s.lnk"
- 
-' 创建快捷方式
 Set oShortcut = oShell.CreateShortcut(strShortcutPath)
- 
-' 设置快捷方式属性
 oShortcut.TargetPath = strTargetFile
-oShortcut.WindowStyle = 1 ' 正常窗口
+oShortcut.WindowStyle = 1
 oShortcut.Description = "%s"
 oShortcut.WorkingDirectory = ""
- 
-' 保存快捷方式
 oShortcut.Save
- 
-Set oShortcut = Nothing
-Set oShell = Nothing
-            '''%(exe_name,"{prname}","{prname}")
-
-            # 将VBScript写入到一个临时文件中
-            temp_vbs_file = os.path.join(os.environ['TEMP'], 'create_shortcut.vbs')
-            with open(temp_vbs_file, 'w', encoding="cp936") as vbs_file:
-                vbs_file.write(vbs_script)
-
-            # 执行VBScript来创建快捷方式
-            subprocess.run(['cscript', '//nologo', temp_vbs_file], check=True)
-
-            # 删除临时VBScript文件
-            os.remove(temp_vbs_file)
+        ''' % (exe_name, "{prname}", "{prname}")
+        temp_vbs_file = os.path.join(os.environ['TEMP'], 'create_shortcut.vbs')
+        with open(temp_vbs_file, 'w', encoding="cp936") as vbs_file:
+            vbs_file.write(vbs_script)
+        subprocess.run(['cscript', '//nologo', temp_vbs_file], check=True)
+        os.remove(temp_vbs_file)
 
                     """
+                    code4="self.create_shortcut(exe_name, extract_path)"
                 else:
-                    code1="            #code1"
+                    code1="    #code1"
+                    code4="#code4"
                 if set_list[1]:
                     code2="""
-            import winreg as reg
-            import os
-            
-            def add_exe_to_startup(exe_path, startup_key='Run'):
-                '''
-            将exe文件添加到Windows启动项。
-            
-            :param exe_path: exe文件的完整路径
-            :param startup_key: 注册表中的启动项键名，默认为'Run'
-            '''
-                try:
-                    # 确保exe文件存在
-                    if not os.path.exists(exe_path):
-                        messagebox.showerror("错误","文件不存在："+exe_path)
-            
-                    # 打开注册表项
-                    with reg.ConnectRegistry(None, reg.HKEY_CURRENT_USER) as hkey:
-                        with reg.OpenKey(hkey, 'Software\\\\Microsoft\\\\Windows\\\\CurrentVersion', 0, reg.KEY_WRITE) as base_key:
-                            # 尝试打开启动项键，如果不存在则创建
-                            try:
-                                with reg.OpenKey(base_key, startup_key, 0, reg.KEY_WRITE) as run_key:
-                                    # 如果exe已经作为启动项存在，则覆盖它
-                                    reg.SetValueEx(run_key, os.path.basename(exe_path), 0, reg.REG_SZ, exe_path)
-                                    
-                            except FileNotFoundError:
-                                # 如果启动项键不存在，则创建它并添加exe
-                                with reg.CreateKey(base_key, startup_key) as run_key:
-                                    reg.SetValueEx(run_key, os.path.basename(exe_path), 0, reg.REG_SZ, exe_path)
-                                    
-                except PermissionError:
-                    messagebox.showerror("错误", "修改注册表需要管理员权限。")
-                except Exception as e:
-                    messagebox.showerror("错误", str(e))
-            
-            # 示例用法
-            exe_path = exe_name  # 替换为你的exe文件路径
-            add_exe_to_startup(exe_path)
+    def add_exe_to_startup(self, exe_path):
+        try:
+            if not os.path.exists(exe_path):
+                messagebox.showerror("错误", "文件不存在：" + exe_path)
+                return
+            with reg.ConnectRegistry(None, reg.HKEY_CURRENT_USER) as hkey:
+                with reg.OpenKey(hkey, 'Software\\\\Microsoft\\\\Windows\\\\CurrentVersion', 0, reg.KEY_WRITE) as base_key:
+                    try:
+                        with reg.OpenKey(base_key, 'Run', 0, reg.KEY_WRITE) as run_key:
+                            reg.SetValueEx(run_key, os.path.basename(exe_path), 0, reg.REG_SZ, exe_path)
+                    except FileNotFoundError:
+                        with reg.CreateKey(base_key, 'Run') as run_key:
+                            reg.SetValueEx(run_key, os.path.basename(exe_path), 0, reg.REG_SZ, exe_path)
+        except PermissionError:
+            messagebox.showerror("错误", "修改注册表需要管理员权限。")
+        except Exception as e:
+            messagebox.showerror("错误", str(e))
                     """
+                    code5="self.add_exe_to_startup(exe_name)"
                 else:
-                    code2="            #code2"
+                    code2="    #code2"
+                    code5="#code5"
                 if set_list[2]:
                     print("请选择安装程序图标")
                     fp2=open_file_dialog()
@@ -398,7 +360,7 @@ Set oShell = Nothing
                     with open(fp3,"r", encoding=encoding2) as f:
                         text2=f.read()
                     code3=f"""
-        scrollable_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=10)
+        scrollable_text = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=50, height=10)
         scrollable_text.grid(pady=20)
     
         # 向Text控件中插入一些文本
@@ -436,39 +398,37 @@ Set oShell = Nothing
                     
                     f.write(f"""
 
-DATA={encoded_data}
-
-import os.path
+import os
 import tempfile
 from base64 import b85decode
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 from tkinter import scrolledtext
-import os
 import zipfile
 import threading
 import shutil
+import subprocess
+import winreg as reg
 
-
-    
-
+DATA = {encoded_data}
 
 class SelfExtractingApp:
     def __init__(self, root):
-        import os
         self.root = root
         self.root.title("{prname}-{vers}-安装程序")
 
         # 设置默认解压路径
-        self.default_extract_path = os.environ.get('PROGRAMFILES', '')+"\\\\{prname}"
+        self.default_extract_path = os.environ.get('PROGRAMFILES', '') + "\\\\{prname}"
 
         # 创建UI组件
         self.create_widgets()
 
     def create_widgets(self):
+        
 {code3}
+        
         # 解压路径输入框和按钮
-        self.extract_path_label = tk.Label(self.root, text="选择安装路径：‌")
+        self.extract_path_label = tk.Label(self.root, text="选择安装路径：")
         self.extract_path_label.grid(pady=10)
 
         self.extract_path_entry = tk.Entry(self.root, width=50)
@@ -487,34 +447,32 @@ class SelfExtractingApp:
         self.progress_bar.grid(pady=10)
 
     def browse_folder(self):
-        # 弹出对话框选择文件夹
         folder_selected = filedialog.askdirectory()
         if folder_selected:
             self.extract_path_entry.delete(0, tk.END)
             self.extract_path_entry.insert(0, folder_selected)
 
-    
     def extract_files(self):
-        # 获取解压路径和zip文件路径
-        
-        
-        
         extract_path = self.extract_path_entry.get()
         
-
+        # 隐藏非进度条元素
+        self.extract_path_label.grid_remove()
+        self.extract_path_entry.grid_remove()
+        self.browse_button.grid_remove()
+        self.extract_button.grid_remove()
+        
         # 创建解压线程
         threading.Thread(target=self.extract, args=(extract_path,)).start()
-    def extract(self, extract_path):
-        import os
-        # 解压文件并更新进度条
-        # Create a temporary working directory
-        tmpdir = tempfile.mkdtemp()
 
-        # Unpack the zipfile into the temporary directory
-        zip_file_path = os.path.join(tmpdir, "setup.zip")
-        with open(zip_file_path, "wb") as fp:
-            fp.write(b85decode(DATA))
+    def extract(self, extract_path):
         try:
+            import os
+            import tempfile
+            tmpdir = tempfile.mkdtemp()
+            zip_file_path = os.path.join(tmpdir, "setup.zip")
+            with open(zip_file_path, "wb") as fp:
+                fp.write(b85decode(DATA))
+        
             with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
                 total_files = len(zip_ref.namelist())
                 extracted_files = 0
@@ -524,17 +482,47 @@ class SelfExtractingApp:
                     self.progress_bar["value"] = (extracted_files / total_files) * 100
                     self.root.update_idletasks()
             if tmpdir:
+                import shutil
                 shutil.rmtree(tmpdir, ignore_errors=True)
-{code1}
-{code2}
-            messagebox.showinfo("成功", "安装成功！‌")
-            import sys
-            sys.exit()
+            
+            # 创建快捷方式和添加到启动项的代码...
+            exe_name = os.path.join(extract_path, "{prname}\\\\{wdesktop}")
+            install_file1=os.path.join(extract_path, "{prname}")
+            {code4}
+            {code5}
+            import os
+            import shutil
+
+            # 获取%appdata%环境变量的值
+            appdata_path = os.getenv('APPDATA')
+
+            # 定义你想要创建的文件夹名称
+            folder_name = "{prname}"
+
+            # 完整路径：%appdata%下的MyNewFolder
+            full_folder_path = os.path.join(appdata_path, folder_name)
+            os.makedirs(full_folder_path)
+    
+            # 定义要写入文件的名称和内容
+            file_name = "path.txt"
+            
+            
+            # 完整文件路径
+            full_file_path = os.path.join(full_folder_path, file_name)
+            
+            # 写入文件
+            with open(full_file_path, 'w') as file:
+                file.write(install_file1)
+            # 安装完成后显示成功消息，并关闭主窗口
+            messagebox.showinfo("成功", "安装成功！")
+            self.root.destroy()
         except Exception as e:
             messagebox.showerror("错误", str(e))
+            
 
-    
+{code1}
 
+{code2}
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -632,7 +620,7 @@ if __name__ == "__main__":
             import webbrowser
 
             # 打开一个特定的网页
-            webbrowser.open('https://www.douyin.com/user/MS4wLjABAAAARkk5zY-7-Et1347qxL_7rsHVzWHOh9NI1YbMAZZ8crI')
+            webbrowser.open('https://gitee.com/xumouren225588/AppDT')
         else:
             print("无效命令！")
         
@@ -642,6 +630,6 @@ def home_page():
     import webbrowser
     
     # 打开一个特定的网页
-    webbrowser.open('https://www.douyin.com/user/MS4wLjABAAAARkk5zY-7-Et1347qxL_7rsHVzWHOh9NI1YbMAZZ8crI')
+    webbrowser.open('https://gitee.com/xumouren225588/AppDT')
 if __name__=="__main__" and s4y1lh4w==2: #序号：2
     home_page()

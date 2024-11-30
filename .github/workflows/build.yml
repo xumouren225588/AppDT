@@ -26,7 +26,10 @@ jobs:
         sudo apt install zip unzip
         pip install setuptools wheel
         python setup.py bdist_wheel sdist
-
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
     - name: Create setup.bat
       run: |
         echo "pip install AppDT-${{ github.event.inputs.AppDTVersion }}-py3-none-any.whl" >> dist/setup.bat

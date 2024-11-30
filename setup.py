@@ -4,7 +4,7 @@ from setuptools import setup
  
 setup(
     name='AppDT',
-    version='1.5.0',
+    version='1.6.0',
     description='(This Is A Chinese Package)此工具箱可以帮您快速构建Windows™应用程序，也可以快速生成安装包',
     long_description=datatext,
     long_description_content_type="text/markdown",

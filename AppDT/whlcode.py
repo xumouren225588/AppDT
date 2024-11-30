@@ -187,7 +187,7 @@ def adt():
                 base_dir = sysdir22+'软件项目\\'  # 替换为您的基础目录路径
                 selected_folder = select_folder_by_number(base_dir)
         
-         
+                import subprocess
                 # 打开资源管理器并导航到当前工作目录
                 subprocess.run(['explorer', selected_folder])
             else:

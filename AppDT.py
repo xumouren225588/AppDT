@@ -552,7 +552,7 @@ if __name__ == "__main__":
                 pitr=os.path.join(text,"pyenv","Scripts","pyinstaller.exe")
                 import subprocess
                 if fp2 is None:
-                    subprocess.run([pitr,"-F","-w",f"--icon={fp2}",f"{prname}-{vers}-setup.py"], check=True)
+                    subprocess.run([pitr,"-F","-w",f"{prname}-{vers}-setup.py"], check=True)
                 else:
                     subprocess.run([pitr,"-F","-w",f"--icon={fp2}",f"{prname}-{vers}-setup.py"], check=True)
                 import shutil

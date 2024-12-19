@@ -4,13 +4,13 @@ from setuptools import setup
  
 setup(
     name='AppDT',
-    version='1.7.0',
+    version='1.8.0',
     description='(This Is A Chinese Package)此工具箱可以帮您快速构建Windows™应用程序，也可以快速生成安装包',
     long_description=datatext,
     long_description_content_type="text/markdown",
     author='xumouren225588',
     author_email='xumouren225588@163.com',
-    url="https://github.com/xumouren225588",
+    url="https://github.com/xumouren225588/AppDT",
     packages=['AppDT'],
     license='MIT',
     install_requires=[

@@ -28,7 +28,6 @@ setup(
     classifiers=[
         
         "Programming Language :: Python",
-        "Operating System :: Microsoft :: Windows",
-        "Platform :: AMD64"
+        "Operating System :: Microsoft :: Windows"
     ],
 )

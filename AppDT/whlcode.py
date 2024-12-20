@@ -623,13 +623,69 @@ if __name__ == "__main__":
             webbrowser.open('https://gitee.com/xumouren225588/AppDT')
         else:
             print("无效命令！")
-        
+
+
 if __name__=="__main__" and s4y1lh4w==1: #序号：1
     adt()
+
+def pyenvdler():
+    
+    import sys
+
+    ver=sys.argv[1]
+
+    import os
+    print("正在下载运行环境……")
+    import wget
+    wget.download(f"https://mirrors.huaweicloud.com/python/{ver}/python-{ver}-embed-amd64.zip","embedtemp.zip")
+    import zipfile
+    from tqdm import tqdm
+    def unzip_with_progress(zip_file_path, extract_to):
+        with zipfile.ZipFile(zip_file_path) as zip_ref:
+            total_files = len(zip_ref.infolist())
+            with tqdm(total=total_files, unit='file') as pbar:
+                for file_info in zip_ref.infolist():
+                    zip_ref.extract(file_info, extract_to)
+                    pbar.update(1)
+    zip_file_path = 'embedtemp.zip'
+    extract_to = "pyenv"
+    print("\n正在解压……")
+    unzip_with_progress(zip_file_path, extract_to)
+    print("正在下载pip……")
+    wget.download(f"https://mirrors.aliyun.com/pypi/get-pip.py","get-pip.py")
+    import os
+
+    appdata_roaming = os.getenv("APPDATA")
+    pip_path = os.path.join(appdata_roaming, "pip")
+    if os.path.exists(pip_path):
+        None
+    else:
+        import os
+        os.mkdir(pip_path)
+        mirror=os.path.join(pip_path, "pip.ini")
+        with open(mirror, "w", encoding="utf-8") as f:
+            f.write('''
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+            ''')
+    os.system(".\\pyenv\\python.exe .\\get-pip.py")
+    your_directory = "pyenv"
+    pth_files = [f for f in os.listdir(your_directory) if f.endswith("._pth")]
+    if pth_files:
+        first_pth_file_name = pth_files[0]
+        with open(os.path.join("pyenv",first_pth_file_name), "w", encoding="utf-8") as f:
+            f.write('import site')
+            print("下载完成！！")
+    else:
+        print("没有找到._pth文件！！")
+
+if __name__=="__main__" and s4y1lh4w==2: #序号：2
+    pyenvdler()
+
 def home_page():
     import webbrowser
     
     # 打开一个特定的网页
     webbrowser.open('https://gitee.com/xumouren225588/AppDT')
-if __name__=="__main__" and s4y1lh4w==2: #序号：2
+if __name__=="__main__" and s4y1lh4w==3: #序号：3
     home_page()

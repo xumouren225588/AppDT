@@ -4,7 +4,7 @@ from setuptools import setup
  
 setup(
     name='AppDT',
-    version='1.8.0',
+    version='2.0.0',
     description='(This Is A Chinese Package)此工具箱可以帮您快速构建Windows™应用程序，也可以快速生成安装包',
     long_description=datatext,
     long_description_content_type="text/markdown",
@@ -22,11 +22,13 @@ setup(
     entry_points={
         'console_scripts': [
             'adt=AppDT.whlcode:adt',
+            'pyenvdler=AppDT.whlcode:pyenvdler'
         ],
     },
     classifiers=[
         
         "Programming Language :: Python",
         "Operating System :: Microsoft :: Windows",
+        "Platform :: AMD64"
     ],
 )

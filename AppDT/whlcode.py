@@ -1,3 +1,13 @@
+#Copyright (c) 2025 xumouren225588
+#AppDT is licensed under Mulan PSL v2.
+#You can use this software according to the terms and conditions of the Mulan
+#PSL v2.
+#You may obtain a copy of Mulan PSL v2 at:
+#         http://license.coscl.org.cn/MulanPSL2
+#THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+#KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+#NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+#See the Mulan PSL v2 for more details.
 s4y1lh4w=1 #此处是调试点，如需调试，请将等号后面的数字改为您要调试的模块序号（默认第一个）
 
 def adt():

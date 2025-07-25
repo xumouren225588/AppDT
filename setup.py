@@ -2,7 +2,7 @@ from setuptools import setup
  
 setup(
     name='AppDT',
-    version='2.0.2',
+    version='3.0.0',
     description='(This Is A Chinese Package)此工具箱可以帮您快速构建Windows™应用程序，也可以快速生成安装包',
     long_description="""# AppDT
 此工具箱可以帮您快速构建Windows应用程序，也可以快速生成安装包。安装完毕后请在命令行中输入“adt”来运行它

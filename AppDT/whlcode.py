@@ -428,7 +428,7 @@ class SelfExtractingApp:
         self.root.title("{prname}-{vers}-安装程序")
 
         # 设置默认解压路径
-        self.default_extract_path = os.environ.get('PROGRAMFILES', '') + "\\\\{prname}"
+        self.default_extract_path = os.environ.get('localappdata', '') + "\\\\{prname}"
 
         # 创建UI组件
         self.create_widgets()
@@ -681,14 +681,25 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple
     os.system(".\\pyenv\\python.exe .\\get-pip.py")
     your_directory = "pyenv"
     pth_files = [f for f in os.listdir(your_directory) if f.endswith("._pth")]
-    if pth_files:
-        first_pth_file_name = pth_files[0]
-        with open(os.path.join("pyenv",first_pth_file_name), "w", encoding="utf-8") as f:
-            f.write('import site')
-            print("下载完成！！")
-    else:
-        print("没有找到._pth文件！！")
+    
+    first_pth_file_name = pth_files[0]
+        
+    # 打开文件并读取所有行
+    file_path = os.path.join("pyenv",first_pth_file_name)  # 替换为你的文件路径
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
 
+    # 检查文件是否为空
+    if lines:
+        # 删除最后一行的所有井号
+        last_line = lines[-1].rstrip('\n')  # 去掉最后一行末尾的换行符
+        last_line = last_line.replace('#', '')  # 删除井号
+        lines[-1] = last_line + '\n'  # 将修改后的内容写回最后一行
+
+    # 将修改后的内容写回文件
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.writelines(lines)
+    print("下载完成！！")
 if __name__=="__main__" and s4y1lh4w==2: #序号：2
     pyenvdler()
 
